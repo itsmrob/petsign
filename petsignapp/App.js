@@ -15,18 +15,21 @@ export default function App() {
     const [appIsReady, setAppIsReady] = useState(false);
 
     useEffect(() => {
-        const prepare = async () => {
-            try {
-                // await Font.loadAsync(Entypo.font);
-                await new Promise((resolve) => setTimeout(resolve, 2000));
-            } catch (e) {
-                console.warn(e);
-            } finally {
-                setAppIsReady(true);
-            }
-        };
+        // const prepare = async () => {
+        //     try {
+        //         await Font.loadAsync(Entypo.font);
+        //         await new Promise((resolve) => setTimeout(resolve, 2000));
+        //     } catch (e) {
+        //         console.warn(e);
+        //     } finally {
+        //         setAppIsReady(true);
+        //     }
+        // };
 
-        prepare();
+        // prepare();
+        setTimeout(() => {
+            setAppIsReady(true)
+        }, 5000)
     }, []);
 
     const onHideLayout = useCallback(async () => {
