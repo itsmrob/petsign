@@ -8,6 +8,9 @@ import * as Font from "expo-font";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import AppNavigator from "./src/navigation/AppNavigator";
 
+import { Provider } from "react-redux";
+import { store } from "./src/store/store";
+
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
@@ -26,7 +29,6 @@ export default function App() {
         };
 
         prepare();
-
     }, []);
 
     const onHideLayout = useCallback(async () => {
@@ -40,9 +42,11 @@ export default function App() {
     }
 
     return (
-        <SafeAreaProvider style={styles.container} onLayout={onHideLayout}>
-            <AppNavigator />
-        </SafeAreaProvider>
+        <Provider store={store}>
+            <SafeAreaProvider style={styles.container} onLayout={onHideLayout}>
+                <AppNavigator />
+            </SafeAreaProvider>
+        </Provider>
     );
 }
 const styles = StyleSheet.create({
