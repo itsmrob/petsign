@@ -8,7 +8,6 @@ import * as Font from "expo-font";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import AppNavigator from "./src/navigation/AppNavigator";
 
-// Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
@@ -17,7 +16,7 @@ export default function App() {
     useEffect(() => {
         const prepare = async () => {
             try {
-                // await Font.loadAsync(Entypo.font);
+                await Font.loadAsync(Entypo.font);
                 await new Promise((resolve) => setTimeout(resolve, 2000));
             } catch (e) {
                 console.warn(e);
@@ -27,6 +26,7 @@ export default function App() {
         };
 
         prepare();
+
     }, []);
 
     const onHideLayout = useCallback(async () => {
