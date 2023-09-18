@@ -9,10 +9,21 @@ import {
 import { commonStyles } from "../styles/theme";
 import LoginButton from "../components/LoginButton.js";
 import { images } from "../constants/images";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { getFirebaseConfig } from "../config/firebase";
 
 const LoginScreen = () => {
-    const handleGoogleLogin = () => {
-        console.log("login with");
+    const handleGoogleLogin = async () => {
+        try {
+            const auth = getAuth(getFirebaseConfig());
+
+            const provider = new GoogleAuthProvider();
+            const result = await signInWithPopup(auth, provider);
+
+            console.log(result.user);
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     const handleFacebookLogin = () => {
