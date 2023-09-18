@@ -1,13 +1,7 @@
-import React from "react";
-import { View, Text } from "react-native";
-import { commonStyles } from "../styles/theme";
+import LoginScreen from "./LoginScreen";
 
 const AuthScreen = () => {
-    return (
-        <View style={commonStyles.center}>
-            <Text>AuthScreen</Text>
-        </View>
-    );
+    return <LoginScreen />;
 };
 
 export default AuthScreen;
