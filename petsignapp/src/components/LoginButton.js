@@ -1,9 +1,9 @@
-import { Button, View } from "react-native";
+import {  View, Text } from "react-native";
 
-const LoginButton = ({ icon, name, type, styles, }) => {
+const LoginButton = ({ onPress }) => {
     return (
         <View>
-            <Button/>
+            <Text>Login Button</Text>
         </View>
     );
 };

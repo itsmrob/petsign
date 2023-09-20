@@ -12,7 +12,7 @@ const LoginScreen = () => {
         <ScrollView contentContainerStyle={{ flex: 1 }}>
             <View style={commonStyles.center}>
                 <Text>Bienvenido</Text>
-                <LoginButton>
+                
             </View>
         </ScrollView>
     );
