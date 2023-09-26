@@ -11,16 +11,22 @@ import AppNavigator from "./src/navigation/AppNavigator";
 import { Provider } from "react-redux";
 import { store } from "./src/store/store";
 
+import { images } from "./src/constants/images";
+import { cacheImages } from "./src/utils/cacheImages";
+
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
     const [appIsReady, setAppIsReady] = useState(false);
 
+    const imageAssets = cacheImages([...Object.values(images)]);
+
     useEffect(() => {
+
         const prepare = async () => {
             try {
-                await Font.loadAsync(Entypo.font);
-                await new Promise((resolve) => setTimeout(resolve, 2000));
+                // await Font.loadAsync(Entypo.font);
+                await Promise.all([...imageAssets]);
             } catch (e) {
                 console.warn(e);
             } finally {
