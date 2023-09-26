@@ -27,6 +27,7 @@ const LoginScreen = () => {
                     <Text style={styles.text}>PetSign</Text>
                 </View>
             </View>
+            
             <View style={styles.onBoardingButtons}>
                 <LoginButton onPress={handleGoogleLogin} type="google">
                     Login with Google
