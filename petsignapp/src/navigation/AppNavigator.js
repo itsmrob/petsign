@@ -12,6 +12,8 @@ import { useSelector } from "react-redux";
 const AppNavigator = () => {
     const isAuth = useSelector((state) => state.auth.token !== null && state.auth.token !== "");
 
+    console.log("isAuth", isAuth)
+
     // const didTryAutoLogin = useSelector((state) => state.auth.didTryAutoLogin);
     /*
         

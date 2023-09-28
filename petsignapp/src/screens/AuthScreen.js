@@ -64,20 +64,25 @@ const styles = StyleSheet.create({
     },
     link: {
         color: "blue",
-        // fontFamily: "medium",
         letterSpacing: 0.3,
     },
     imageContainer: {
-        flex: 3,
         alignItems: "center",
-        // backgroundColor: "red",
+        justifyContent: 'center',
+        height: '25%',
     },
     image: {
-        width: "50%",
+        width: "50%"
     },
     keyboardAvoidingView: {
         flex: 1,
         justifyContent: "center",
+        
     },
+    title: {
+        color: "#000",
+        fontWeight: 'bold',
+        fontSize: 17
+    }
 });
 export default AuthScreen;

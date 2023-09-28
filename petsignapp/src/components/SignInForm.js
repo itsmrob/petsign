@@ -1,8 +1,14 @@
-import React, { useReducer } from "react";
+import React, { useCallback, useReducer, useState } from "react";
 import { View, Text } from "react-native";
 import Input from "../components/Input";
+
+import { validatePassword, validateEmail } from "../utils/validationContraints";
+import { validateInput } from "../actions/formActions";
+import { formReducer } from "../reducers/formReducer";
+
 import { FontAwesome, Feather } from "@expo/vector-icons";
 import SubmitButton from "./SubmitButton";
+import { useDispatch } from "react-redux";
 
 const SignInForm = () => {
     const initialState = {
@@ -17,14 +23,37 @@ const SignInForm = () => {
         formIsValid: false,
     };
 
-    const [formState, setFormState] = useReducer(() => {}, initialState);
+    const [formState, dispatchFormState] = useReducer(
+        formReducer,
+        initialState
+    );
+
+    const [error, setError] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    const dispatch = useDispatch();
 
     const handleLogin = () => {
-        console.log("login in");
+        setLoading(true);
+        console.log('loggin in')
+        // let inputValues = formState.inputValues;
+        // try {
+            
+        // } catch (error) {
+            
+        // }
     };
 
-    const inputChangedHandler = (inputId, inputValue) => {};
-
+    const inputChangedHandler = useCallback(
+        (inputId, inputValue) => {
+            dispatchFormState({
+                inputId,
+                inputValue,
+                validationResult: validateInput(inputId, inputValue),
+            });
+        },
+        [dispatchFormState]
+    );
     const { email, password } = formState.inputValidities;
     return (
         <>
