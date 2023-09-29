@@ -1,17 +1,17 @@
-import React, { useCallback, useReducer, useState } from "react";
-import { View, Text } from "react-native";
+import React, { useCallback, useReducer, useEffect, useState } from "react";
+import { Alert } from "react-native";
 import Input from "../components/Input";
-
-import { validatePassword, validateEmail } from "../utils/validationContraints";
-import { validateInput } from "../actions/formActions";
-import { formReducer } from "../reducers/formReducer";
-
+import SubmitButton from "../components/SubmitButton";
 import { FontAwesome, Feather } from "@expo/vector-icons";
-import SubmitButton from "./SubmitButton";
+import { formReducer } from "../reducers/formReducer";
+import { validateEmail, validatePassword } from "../utils/validationContraints";
+import { validateInput } from "../actions/formActions";
+import { signIn } from "../actions/authActions";
+
 import { useDispatch } from "react-redux";
 
 const SignInForm = () => {
-    const initialState = {
+    let initialState = {
         inputValues: {
             email: "",
             password: "",
@@ -24,37 +24,54 @@ const SignInForm = () => {
     };
 
     const [formState, dispatchFormState] = useReducer(
+        //allows us to manage complex states, its an improvement of useState
         formReducer,
         initialState
     );
 
-    const [error, setError] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState();
+    const [laoding, setLoading] = useState(false);
 
     const dispatch = useDispatch();
 
-    const handleLogin = () => {
-        setLoading(true);
-        console.log('loggin in')
-        // let inputValues = formState.inputValues;
-        // try {
-            
-        // } catch (error) {
-            
-        // }
-    };
-
     const inputChangedHandler = useCallback(
+        //allows us to memoize a function just to call it
         (inputId, inputValue) => {
+            // console.log("inputValue ",inputValue)
             dispatchFormState({
-                inputId,
-                inputValue,
-                validationResult: validateInput(inputId, inputValue),
+                inputId, //to know which input fields belongs to
+                inputValue, //the value which is coming from
+                validationResult: validateInput(inputId, inputValue), //if everything is ok, return undefined, otherwise will return an advice
             });
         },
         [dispatchFormState]
     );
-    const { email, password } = formState.inputValidities;
+
+    // console.log("mounting component", error);
+
+    useEffect(() => {
+        if (error) {
+            // console.log("ERROR")
+            Alert.alert("An error occured", error, [{ text: "Okay" }]);
+        }
+    }, [error]);
+
+    const handleLogin = async () => {
+        setLoading(true);
+        let inputValues = formState.inputValues;
+        try {
+            const action = signIn(inputValues);
+            await dispatch(action);
+            setLoading(false);
+            setError(null);
+        } catch (error) {
+            setError(error.message);
+            setLoading(false);
+        }
+    };
+
+    let { email, password } = formState.inputValidities;
+
     return (
         <>
             <Input

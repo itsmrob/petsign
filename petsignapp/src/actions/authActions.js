@@ -1,17 +1,14 @@
-import { getFirebaseConfig } from "../config/firebaseConfig";
+import { app, getAuth } from "../config/firebaseConfig";
 import {
     createUserWithEmailAndPassword,
-    getAuth,
+    getReactNativePersistence,
     signInWithEmailAndPassword,
 } from "firebase/auth";
 import { child, getDatabase, ref, set, get } from "firebase/database";
 import { authenticate } from "../slices/authSlice";
+import { getUserData } from '../actions/userActions'
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-const app = getFirebaseConfig();
-
-console.log(app)
 
 const auth = getAuth(app);
 
@@ -50,13 +47,37 @@ export const signUp = ({ firstName, lastName, email, password }) => {
     };
 };
 
-const saveDataToStorage = (accessToken, uid, expiryTime) => {
-    const userData = {
-        accessToken,
-        uid,
-        expiryTime: expiryTime.toISOString(),
+export const signIn = ({ email, password }) => {
+    return async (dispatch) => {
+        try {
+            const result = await signInWithEmailAndPassword(
+                auth,
+                email,
+                password
+            );
+
+            const { uid, stsTokenManager } = result.user;
+            const { accessToken, expirationTime } = stsTokenManager;
+
+            const userData = await getUserData(uid);
+
+            const expiryTime = new Date(expirationTime);
+
+            dispatch(authenticate({ token: accessToken, userData }));
+
+            saveDataToStorage(accessToken, uid, expiryTime);
+        } catch (error) {
+            console.log("errorrr ", error);
+            let message = "Something went wrong while you're login in";
+            if (
+                error.code == "auth/wrong-password" ||
+                error.code == "auth/user-not-found"
+            ) {
+                message = "The username or password was incorrect";
+            }
+            throw new Error(message);
+        }
     };
-    AsyncStorage.setItem("@userData", JSON.stringify(userData));
 };
 
 const createUser = async ({ firstName, lastName, email, uid }) => {
@@ -74,4 +95,13 @@ const createUser = async ({ firstName, lastName, email, uid }) => {
     await set(childRef, userData);
 
     return userData;
+};
+
+const saveDataToStorage = (accessToken, uid, expiryTime) => {
+    const userData = {
+        accessToken,
+        uid,
+        expiryTime: expiryTime.toISOString(),
+    };
+    AsyncStorage.setItem("@userData", JSON.stringify(userData));
 };
