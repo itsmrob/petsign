@@ -6,7 +6,7 @@ import {
 } from "firebase/auth";
 import { child, getDatabase, ref, set, get } from "firebase/database";
 import { authenticate } from "../slices/authSlice";
-import { getUserData } from '../actions/userActions'
+import { getUserData } from "../actions/userActions";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -21,7 +21,7 @@ export const signUp = ({ firstName, lastName, email, password }) => {
                 password
             );
 
-            const { uid, stsTokenManager } = result.users;
+            const { uid, stsTokenManager } = result.user;
             const { accessToken, expirationTime } = stsTokenManager;
 
             const expiryTime = new Date(expirationTime);
@@ -36,6 +36,7 @@ export const signUp = ({ firstName, lastName, email, password }) => {
             dispatch(authenticate({ token: accessToken, userData }));
 
             saveDataToStorage(accessToken, uid, expiryTime);
+
         } catch (error) {
             const errorCode = error.code;
             let errorMessage = "Something went wrong";
@@ -67,7 +68,7 @@ export const signIn = ({ email, password }) => {
 
             saveDataToStorage(accessToken, uid, expiryTime);
         } catch (error) {
-            console.log("errorrr ", error);
+            // console.log("errorrr ", error);
             let message = "Something went wrong while you're login in";
             if (
                 error.code == "auth/wrong-password" ||
@@ -77,6 +78,16 @@ export const signIn = ({ email, password }) => {
             }
             throw new Error(message);
         }
+    };
+};
+
+export const signOut = async () => {
+    const storedAuthInfo = await AsyncStorage.getItem("@userData");
+    if (storedAuthInfo) {
+        AsyncStorage.removeItem("@userData");
+    }
+    return {
+        type: "SIGN_OUT",
     };
 };
 
@@ -90,11 +101,16 @@ const createUser = async ({ firstName, lastName, email, uid }) => {
         uid,
         signUpDate: new Date().toISOString(),
     };
-    const dbRef = ref(getDatabase());
-    const childRef = child(dbRef, `users/${uid}`);
-    await set(childRef, userData);
 
-    return userData;
+    try {
+        const dbRef = ref(getDatabase());
+        const childRef = child(dbRef, `users/${uid}`);
+        await set(childRef, userData);
+    } catch (error) {
+        throw new Error(error);
+    } finally {
+        return userData;
+    }
 };
 
 const saveDataToStorage = (accessToken, uid, expiryTime) => {
