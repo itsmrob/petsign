@@ -34,15 +34,16 @@ LocationDate.propTypes = {
 };
 
 // Componente principal ReportCard
-const ReportCard = ({
-    petName,
-    petBreed,
-    petColor,
-    lastSeenlocation,
-    lastSeenDate,
-    photoURL,
-}) => {
-    console.log(lastSeenlocation)
+const ReportCard = (props) => {
+    const {
+        petName,
+        petBreed,
+        petColor,
+        lastSeenlocation,
+        lastSeenDate,
+        photoURL,
+    } = props;
+    // console.log(props);
     return (
         <View style={styles.card}>
             <Image source={{ uri: photoURL }} style={styles.imagen} />

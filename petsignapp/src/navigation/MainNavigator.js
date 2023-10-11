@@ -6,6 +6,9 @@ import FeedScreen from "../screens/FeedScreen";
 import FindScreen from "../screens/FindScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 
+//Internal screen
+import ReportScreen from "../screens/ReportScreen";
+
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -60,6 +63,10 @@ const MainNavigator = (props) => {
                     headerShown: false,
                 }}
             />
+            <Stack.Screen
+            name="ReportScreen"
+            component={ReportScreen}
+        />
         </Stack.Navigator>
     );
 };

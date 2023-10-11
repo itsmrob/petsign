@@ -22,7 +22,6 @@ export default function App() {
     const imageAssets = cacheImages([...Object.values(images)]);
 
     useEffect(() => {
-
         const prepare = async () => {
             try {
                 // await Font.loadAsync(Entypo.font);
