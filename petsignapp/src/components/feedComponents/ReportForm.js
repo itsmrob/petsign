@@ -5,11 +5,17 @@ import {
     TextInput,
     TouchableOpacity,
     StyleSheet,
+    Button,
 } from "react-native";
+import Input from "./../Input";
+import SubmitButton from "./../SubmitButton";
+import DateTimeButton from "../DateTimeButton";
+import { FontAwesome, Feather } from "@expo/vector-icons";
 import PropTypes from "prop-types";
+import CustomDropdown from "../CustomDropdown";
 
 const ReportForm = ({ onSubmit }) => {
-    const [formData, setFormData] = useState({
+    const petInformation = {
         petName: "",
         petBreed: "",
         petColor: "",
@@ -17,7 +23,9 @@ const ReportForm = ({ onSubmit }) => {
         date: "",
         time: "",
         details: "",
-    });
+    };
+    const [formData, setFormData] = useState(petInformation);
+    const [modalVisible, setModalVisible] = useState(false);
 
     const handleChange = (field, value) => {
         setFormData((prevData) => ({
@@ -27,12 +35,9 @@ const ReportForm = ({ onSubmit }) => {
     };
 
     const handleSubmit = () => {
-        // Validar datos antes de enviar
         const { petName, location, date, time } = formData;
         if (petName && location && date && time) {
             onSubmit(formData);
-
-            // Limpiar campos después de enviar
             setFormData({
                 petName: "",
                 petBreed: "",
@@ -43,73 +48,93 @@ const ReportForm = ({ onSubmit }) => {
                 details: "",
             });
         } else {
-            // Manejar errores o mostrar un mensaje al usuario
+            console.log("Something went wrong");
         }
     };
 
     return (
         <View style={styles.container}>
-            <Text style={styles.label}>Pet Name</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Enter Pet Name"
-                value={formData.petName}
-                onChangeText={(text) => handleChange("petName", text)}
+            <Input
+                id="petName"
+                label="Nombre de la mascota"
+                iconPack={FontAwesome}
+                icon="paw"
+                onInputChanged={handleSubmit}
+                autoCapitalize="none"
+                errorText={""}
             />
-
-            <Text style={styles.label}>Pet Breed</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Enter Pet Breed"
-                value={formData.petBreed}
-                onChangeText={(text) => handleChange("petBreed", text)}
+            <Input
+                id="petType"
+                label="Tipo de mascota"
+                iconPack={FontAwesome}
+                icon="paw"
+                onInputChanged={handleSubmit}
+                autoCapitalize="none"
+                errorText={""}
             />
-
-            <Text style={styles.label}>Pet Color</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Enter Pet Color"
-                value={formData.petColor}
-                onChangeText={(text) => handleChange("petColor", text)}
+            <Input
+                id="petBreed"
+                label="Raza de la mascota"
+                iconPack={FontAwesome}
+                icon="paw"
+                onInputChanged={handleSubmit}
+                autoCapitalize="none"
+                errorText={""}
+            />
+            <Input
+                id="petColor"
+                label="Color de la mascota"
+                iconPack={FontAwesome}
+                icon="tint"
+                onInputChanged={handleSubmit}
+                autoCapitalize="none"
+                errorText={""}
             />
 
             <Text style={styles.label}>Location</Text>
             {/* Componente de mapa podría ir aquí */}
 
-            <Text style={styles.label}>Date</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Enter Date"
-                value={formData.date}
-                onChangeText={(text) => handleChange("date", text)}
+            <DateTimeButton
+                pickerId="petLostTime"
+                pickerLabel="Ultima vez visto"
             />
-
-            <Text style={styles.label}>Time</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Enter Time"
-                value={formData.time}
-                onChangeText={(text) => handleChange("time", text)}
+            <Input
+                id="petLostDetails"
+                label="Brinda mas detalles"
+                iconPack={FontAwesome}
+                icon="pencil"
+                onInputChanged={handleSubmit}
+                autoCapitalize="none"
+                errorText={""}
+                multiline={true}
+                numberOfLines={5}
+                editable={true}
             />
+            <SubmitButton
+                title="Generate Report"
+                onPress={() => console.log("submitting data")}
+                style={{ marginTop: 20 }}
 
-            <Text style={styles.label}>Details</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Enter Details"
-                multiline
-                numberOfLines={4}
-                value={formData.details}
-                onChangeText={(text) => handleChange("details", text)}
+                // disabled={!formState.formIsValid}
             />
-
-            <TouchableOpacity
-                style={styles.submitButton}
-                onPress={handleSubmit}>
-                <Text style={styles.submitButtonText}>Submit</Text>
-            </TouchableOpacity>
         </View>
     );
 };
+
+/*
+
+            <Button
+                title="Tipo de mascota"
+                onPress={() => setModalVisible(true)}
+            />
+            <CustomDropdown
+                label="Tipo de mascota"
+                options={["Gato", "Perro", "Mapache", "Otro"]}
+                onOptionSelected={(option) => console.log(option)}
+                visible={modalVisible}
+                onClose={() => setModalVisible(false)}
+            />
+*/
 
 ReportForm.propTypes = {
     onSubmit: PropTypes.func.isRequired,
