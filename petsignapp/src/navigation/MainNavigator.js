@@ -6,6 +6,10 @@ import FeedScreen from "../screens/FeedScreen";
 import FindScreen from "../screens/FindScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 
+//Internal screen
+import ReportScreen from "../screens/ReportScreen";
+import LocationScreen from "../screens/LocationScreen";
+
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -58,6 +62,20 @@ const MainNavigator = (props) => {
                 component={TabNavigator}
                 options={{
                     headerShown: false,
+                }}
+            />
+            <Stack.Screen
+                name="ReportScreen"
+                component={ReportScreen}
+                options={{
+                    title: "¡Reportar mascota!",
+                }}
+            />
+            <Stack.Screen
+                name="LocationSelection"
+                component={LocationScreen}
+                options={{
+                    title: "¡Selecciona la ultima ubicación de tu mascota!",
                 }}
             />
         </Stack.Navigator>

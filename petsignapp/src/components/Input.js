@@ -48,7 +48,6 @@ const styles = StyleSheet.create({
     },
     label: {
         marginVertical: 8,
-        // fontFamily: "bold",
         letterSpacing: 0.3,
         color: colors.textColor,
     },
@@ -59,7 +58,7 @@ const styles = StyleSheet.create({
     input: {
         color: colors.textColor,
         flex: 1,
-        // fontFamily: "regular",
+        // flexShrink: 1,
         letterSpacing: 0.3,
         paddingTop: 0,
     },
