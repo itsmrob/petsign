@@ -6,7 +6,9 @@ const ReportScreen = (props) => {
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
-                <Text>Reportar Mascota</Text>
+                <View style={styles.titleContainer}>
+                    <Text style={styles.titleStyle}>Ingresa la información de tu mascota!</Text>
+                </View>
                 <ReportForm />
             </ScrollView>
         </SafeAreaView>
@@ -16,6 +18,17 @@ const ReportScreen = (props) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    titleContainer: {
+        justifyContent: "center",
+        alignItems: "center",
+        textAlign: "center",
+        paddingTop: 10,
+        paddingBottom: 10,
+    },
+    titleStyle: {
+        fontWeight: 'bold',
+        fontSize: 15,
     },
 });
 

@@ -8,6 +8,7 @@ import ProfileScreen from "../screens/ProfileScreen";
 
 //Internal screen
 import ReportScreen from "../screens/ReportScreen";
+import LocationScreen from "../screens/LocationScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -64,9 +65,19 @@ const MainNavigator = (props) => {
                 }}
             />
             <Stack.Screen
-            name="ReportScreen"
-            component={ReportScreen}
-        />
+                name="ReportScreen"
+                component={ReportScreen}
+                options={{
+                    title: "¡Reportar mascota!",
+                }}
+            />
+            <Stack.Screen
+                name="LocationSelection"
+                component={LocationScreen}
+                options={{
+                    title: "¡Selecciona la ultima ubicación de tu mascota!",
+                }}
+            />
         </Stack.Navigator>
     );
 };

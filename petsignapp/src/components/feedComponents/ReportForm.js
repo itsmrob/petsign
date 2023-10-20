@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     View,
     Text,
@@ -13,8 +13,11 @@ import DateTimeButton from "../DateTimeButton";
 import { FontAwesome, Feather } from "@expo/vector-icons";
 import PropTypes from "prop-types";
 import CustomDropdown from "../CustomDropdown";
+import MapComponent from "../MapComponent.js";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
-const ReportForm = ({ onSubmit }) => {
+const ReportForm = () => {
+    // console.log("props", props);
     const petInformation = {
         petName: "",
         petBreed: "",
@@ -26,6 +29,16 @@ const ReportForm = ({ onSubmit }) => {
     };
     const [formData, setFormData] = useState(petInformation);
     const [modalVisible, setModalVisible] = useState(false);
+    const [location, setLocation] = useState(null);
+
+    const navigation = useNavigation();
+    const route = useRoute();
+
+    useEffect(() => {
+        if (route.params?.location) {
+            setLocation(route.params.location);
+        }
+    }, [route.params?.location]);
 
     const handleChange = (field, value) => {
         setFormData((prevData) => ({
@@ -50,6 +63,10 @@ const ReportForm = ({ onSubmit }) => {
         } else {
             console.log("Something went wrong");
         }
+    };
+
+    const handleLocation = (location) => {
+        console.log("selectedLocation", location);
     };
 
     return (
@@ -90,10 +107,17 @@ const ReportForm = ({ onSubmit }) => {
                 autoCapitalize="none"
                 errorText={""}
             />
-
-            <Text style={styles.label}>Location</Text>
-            {/* Componente de mapa podría ir aquí */}
-
+            <Text style={styles.label}>Ubicación</Text>
+            <Button
+                title={
+                    location
+                        ? "Se ha seleccionado una ubicación"
+                        : "Seleccionar ubicación"
+                }
+                onPress={() => {
+                    navigation.navigate("LocationSelection");
+                }}
+            />
             <DateTimeButton
                 pickerId="petLostTime"
                 pickerLabel="Ultima vez visto"
@@ -120,22 +144,6 @@ const ReportForm = ({ onSubmit }) => {
         </View>
     );
 };
-
-/*
-
-            <Button
-                title="Tipo de mascota"
-                onPress={() => setModalVisible(true)}
-            />
-            <CustomDropdown
-                label="Tipo de mascota"
-                options={["Gato", "Perro", "Mapache", "Otro"]}
-                onOptionSelected={(option) => console.log(option)}
-                visible={modalVisible}
-                onClose={() => setModalVisible(false)}
-            />
-*/
-
 ReportForm.propTypes = {
     onSubmit: PropTypes.func.isRequired,
 };
@@ -145,8 +153,8 @@ const styles = StyleSheet.create({
         padding: 16,
     },
     label: {
-        fontSize: 16,
-        fontWeight: "bold",
+        // fontWeight: "bold",
+        marginTop: 10,
         marginBottom: 8,
     },
     input: {
