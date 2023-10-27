@@ -59,7 +59,7 @@ const MapComponent = () => {
     };
 
     const handleConfirm = () => {
-        console.log(location)
+        console.log(location);
         navigation.navigate("ReportScreen", {
             location: location.coords,
         });
