@@ -60,6 +60,7 @@ const SignUpForm = (props) => {
             let currentValidation = validationTypes[inputId];
             if (currentValidation) {
                 dispatchFormState({
+                    type: "INPUT_CHANGE",
                     inputId,
                     inputValue,
                     validationResult: currentValidation(inputId, inputValue),

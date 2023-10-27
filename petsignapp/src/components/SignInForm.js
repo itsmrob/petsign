@@ -39,6 +39,7 @@ const SignInForm = () => {
         (inputId, inputValue) => {
             // console.log("inputValue ",inputValue)
             dispatchFormState({
+                type: 'INPUT_CHANGE',
                 inputId, //to know which input fields belongs to
                 inputValue, //the value which is coming from
                 validationResult: validateInput(inputId, inputValue), //if everything is ok, return undefined, otherwise will return an advice

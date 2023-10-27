@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useReducer } from "react";
 import {
     View,
     Text,
@@ -6,6 +6,7 @@ import {
     TouchableOpacity,
     StyleSheet,
     Button,
+    Image,
 } from "react-native";
 import Input from "./../Input";
 import SubmitButton from "./../SubmitButton";
@@ -15,58 +16,110 @@ import PropTypes from "prop-types";
 import CustomDropdown from "../CustomDropdown";
 import MapComponent from "../MapComponent.js";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { formReducer } from "../../reducers/formReducer";
+import { uploadImage } from "../../config/uploadImage";
+
+import * as ImagePicker from "expo-image-picker";
+import * as Progress from "react-native-progress";
 
 const ReportForm = () => {
-    // console.log("props", props);
-    const petInformation = {
-        petName: "",
-        petBreed: "",
-        petColor: "",
-        location: "",
-        date: "",
-        time: "",
-        details: "",
+    const initialState = {
+        inputValues: {
+            petName: "",
+            petBreed: "",
+            petColor: "",
+            petLastLocation: "",
+            petLostTime: "",
+            petLostDetails: "",
+            petImage: "",
+        },
+        inputValidities: {
+            petName: false,
+            petBreed: false,
+            petColor: false,
+            petLastLocation: false,
+            petLostTime: false,
+            petLostDetails: false,
+            petImage: false,
+        },
+        formIsValid: false,
     };
-    const [formData, setFormData] = useState(petInformation);
-    const [modalVisible, setModalVisible] = useState(false);
-    const [location, setLocation] = useState(null);
+    const [formData, setFormData] = useState(initialState);
+    const [location, setLocation] = useState();
+    const [image, setImage] = useState();
+    const [imageProgress, setImageProgress] = useState(0);
+    const [loading, setLoading] = useState(false);
+
+    const [formState, dispatchFormState] = useReducer(
+        formReducer,
+        initialState
+    );
 
     const navigation = useNavigation();
     const route = useRoute();
 
+    const handleInputValues = (inputId, inputValue) => {
+        dispatchFormState({
+            type: "INPUT_CHANGE",
+            inputId,
+            inputValue,
+            validationResult: true,
+        });
+    };
+
+    const inputChangedHandler = useCallback(handleInputValues, [
+        dispatchFormState,
+    ]);
+
     useEffect(() => {
         if (route.params?.location) {
-            setLocation(route.params.location);
+            const currentLocation = route.params.location;
+            setLocation(currentLocation);
+
+            dispatchFormState({
+                type: "UPDATE_LOCATION",
+                location: currentLocation,
+            });
         }
     }, [route.params?.location]);
 
-    const handleChange = (field, value) => {
-        setFormData((prevData) => ({
-            ...prevData,
-            [field]: value,
-        }));
-    };
+    const handleReport = async () => {
+        const inputValues = formState.inputValues;
+        const petName = inputValues.petName;
+        try {
+            setImage(null);
+            const imageResult = await uploadImage(
+                image,
+                petName,
+                setImageProgress
+            );
+            const imageUrl = imageResult?.downloadUrl;
 
-    const handleSubmit = () => {
-        const { petName, location, date, time } = formData;
-        if (petName && location && date && time) {
-            onSubmit(formData);
-            setFormData({
-                petName: "",
-                petBreed: "",
-                petColor: "",
-                location: "",
-                date: "",
-                time: "",
-                details: "",
+            dispatchFormState({
+                type: "UPDATE_IMAGE",
+                imageUrl: imageUrl,
             });
-        } else {
-            console.log("Something went wrong");
+            setImage(imageUrl);
+
+        } catch (error) {
+            console.log("Something went wrong while uploading image", error);
+        } finally {
+            console.log("inputValues ", inputValues);
         }
     };
 
-    const handleLocation = (location) => {
-        console.log("selectedLocation", location);
+    const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        if (!result.canceled) {
+            const petImage = result.assets[0].uri;
+            setImage(petImage);
+        }
     };
 
     return (
@@ -76,7 +129,7 @@ const ReportForm = () => {
                 label="Nombre de la mascota"
                 iconPack={FontAwesome}
                 icon="paw"
-                onInputChanged={handleSubmit}
+                onInputChanged={inputChangedHandler}
                 autoCapitalize="none"
                 errorText={""}
             />
@@ -85,7 +138,7 @@ const ReportForm = () => {
                 label="Tipo de mascota"
                 iconPack={FontAwesome}
                 icon="paw"
-                onInputChanged={handleSubmit}
+                onInputChanged={inputChangedHandler}
                 autoCapitalize="none"
                 errorText={""}
             />
@@ -94,7 +147,7 @@ const ReportForm = () => {
                 label="Raza de la mascota"
                 iconPack={FontAwesome}
                 icon="paw"
-                onInputChanged={handleSubmit}
+                onInputChanged={inputChangedHandler}
                 autoCapitalize="none"
                 errorText={""}
             />
@@ -103,10 +156,26 @@ const ReportForm = () => {
                 label="Color de la mascota"
                 iconPack={FontAwesome}
                 icon="tint"
-                onInputChanged={handleSubmit}
+                onInputChanged={inputChangedHandler}
                 autoCapitalize="none"
                 errorText={""}
             />
+            <Text style={styles.label}>Imagen</Text>
+            <Button title="Seleccionar imagen" onPress={pickImage} />
+            <View style={styles.imageFlow}>
+                {image ? (
+                    <Image
+                        source={{ uri: image }}
+                        style={{ width: 200, height: 200 }}
+                    />
+                ) : (
+                    <Progress.Bar
+                        progress={imageProgress}
+                        width={200}
+                        height={15}
+                    />
+                )}
+            </View>
             <Text style={styles.label}>Ubicación</Text>
             <Button
                 title={
@@ -121,31 +190,29 @@ const ReportForm = () => {
             <DateTimeButton
                 pickerId="petLostTime"
                 pickerLabel="Ultima vez visto"
+                onInputChanged={inputChangedHandler}
             />
             <Input
                 id="petLostDetails"
                 label="Brinda mas detalles"
                 iconPack={FontAwesome}
                 icon="pencil"
-                onInputChanged={handleSubmit}
+                onInputChanged={inputChangedHandler}
                 autoCapitalize="none"
                 errorText={""}
                 multiline={true}
                 numberOfLines={5}
                 editable={true}
             />
+
             <SubmitButton
                 title="Generate Report"
-                onPress={() => console.log("submitting data")}
+                onPress={handleReport}
                 style={{ marginTop: 20 }}
-
-                // disabled={!formState.formIsValid}
+                disabled={!image}
             />
         </View>
     );
-};
-ReportForm.propTypes = {
-    onSubmit: PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({
@@ -175,6 +242,10 @@ const styles = StyleSheet.create({
         color: "white",
         fontSize: 16,
         fontWeight: "bold",
+    },
+    imageFlow: {
+        justifyContent: "center",
+        alignItems: "center",
     },
 });
 

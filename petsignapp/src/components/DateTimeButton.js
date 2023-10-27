@@ -4,13 +4,17 @@ import { Text, View, Button, Platform, StyleSheet } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import colors from "../constants/colors";
 
-const DateTimeButton = ({ pickerLabel, pickerId }) => {
+const DateTimeButton = ({ pickerId, pickerLabel, onInputChanged }) => {
     const [date, setDate] = useState(new Date());
     const [show, setShow] = useState(true);
 
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date;
-        setDate(currentDate.toLocaleString());
+        if (currentDate) {
+            setDate(currentDate);
+            onInputChanged &&
+                onInputChanged(pickerId, currentDate.toLocaleString());
+        }
     };
     return (
         <View style={styles.container}>
@@ -31,7 +35,6 @@ const DateTimeButton = ({ pickerLabel, pickerId }) => {
 
 const styles = StyleSheet.create({
     container: {
-        // justifyContent: "center",
         alignItems: "start",
     },
     label: {
