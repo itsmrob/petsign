@@ -42,11 +42,12 @@ export const formReducer = (state, action) => {
 
             break;
         case "UPDATE_IMAGE":
+            // console.log("action", action);
             return {
                 ...state,
                 inputValues: {
                     ...state.inputValues,
-                    petImage: action.imageUrl,
+                    petImage: action.url,
                 },
                 inputValidities: {
                     ...state.inputValidities,

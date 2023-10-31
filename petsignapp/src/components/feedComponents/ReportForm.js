@@ -7,6 +7,7 @@ import {
     StyleSheet,
     Button,
     Image,
+    ActivityIndicator,
 } from "react-native";
 import Input from "./../Input";
 import SubmitButton from "./../SubmitButton";
@@ -21,6 +22,8 @@ import { uploadImage } from "../../config/uploadImage";
 
 import * as ImagePicker from "expo-image-picker";
 import * as Progress from "react-native-progress";
+import { generateReport } from "../../actions/reportActions";
+import { useDispatch } from "react-redux";
 
 const ReportForm = () => {
     const initialState = {
@@ -44,7 +47,6 @@ const ReportForm = () => {
         },
         formIsValid: false,
     };
-    const [formData, setFormData] = useState(initialState);
     const [location, setLocation] = useState();
     const [image, setImage] = useState();
     const [imageProgress, setImageProgress] = useState(0);
@@ -56,6 +58,7 @@ const ReportForm = () => {
     );
 
     const navigation = useNavigation();
+    const dispatch = useDispatch();
     const route = useRoute();
 
     const handleInputValues = (inputId, inputValue) => {
@@ -80,31 +83,43 @@ const ReportForm = () => {
                 type: "UPDATE_LOCATION",
                 location: currentLocation,
             });
+
+            if (!formState.inputValues.petImage) {
+                dispatchFormState({
+                    type: "UPDATE_IMAGE",
+                    url: image,
+                });
+            }
         }
-    }, [route.params?.location]);
+    }, [route.params?.location, formState.inputValues.petImage]);
 
     const handleReport = async () => {
-        const inputValues = formState.inputValues;
-        const petName = inputValues.petName;
+        setLoading(true);
+        try {
+            await handleUploadImage();
+            const action = generateReport(formState.inputValues);
+            await dispatch(action);
+        } catch (error) {
+            console.log("Something went wrong while sending report", error);
+        } finally {
+            setLoading(false);
+            navigation.goBack();
+        }
+    };
+
+    const handleUploadImage = async () => {
         try {
             setImage(null);
             const imageResult = await uploadImage(
                 image,
-                petName,
+                formState.inputValues.petName,
                 setImageProgress
             );
             const imageUrl = imageResult?.downloadUrl;
-
-            dispatchFormState({
-                type: "UPDATE_IMAGE",
-                imageUrl: imageUrl,
-            });
             setImage(imageUrl);
-
         } catch (error) {
             console.log("Something went wrong while uploading image", error);
-        } finally {
-            console.log("inputValues ", inputValues);
+            throw new Error(error);
         }
     };
 
@@ -204,13 +219,18 @@ const ReportForm = () => {
                 numberOfLines={5}
                 editable={true}
             />
-
-            <SubmitButton
-                title="Generate Report"
-                onPress={handleReport}
-                style={{ marginTop: 20 }}
-                disabled={!image}
-            />
+            {loading ? (
+                <View styles={{ flexDirection: "row" }}>
+                    <ActivityIndicator size="large" color="#00ff00" />
+                </View>
+            ) : (
+                <SubmitButton
+                    title="Reportar"
+                    onPress={handleReport}
+                    style={{ marginTop: 20 }}
+                    disabled={!image}
+                />
+            )}
         </View>
     );
 };
