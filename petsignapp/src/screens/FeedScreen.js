@@ -44,7 +44,9 @@ const FeedScreen = () => {
                         />
                     ))
                 ) : (
-                    <Text>No hay publicaciones todavia</Text>
+                    <View style={styles.loadingStatus}>
+                        <Text>No hay publicaciones todavia</Text>
+                    </View>
                 )}
             </ScrollView>
             <TouchableOpacity

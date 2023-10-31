@@ -8,6 +8,7 @@ import {
     Image,
     TouchableOpacity,
     ActivityIndicator,
+    ScrollView,
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useSelector } from "react-redux";
@@ -25,10 +26,10 @@ const UserProfile = () => {
         const daysDifference = difference / (1000 * 60 * 60 * 24);
 
         if (daysDifference < 365) {
-            return `${Math.floor(daysDifference)} days`;
+            return `${Math.floor(daysDifference)} dias`;
         }
         const yearsDifference = daysDifference / 365;
-        return `${Math.floor(yearsDifference)} years`;
+        return `${Math.floor(yearsDifference)} años`;
     };
 
     if (!userData) {
@@ -38,39 +39,55 @@ const UserProfile = () => {
             </View>
         );
     }
-    
+
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                <Ionicons name="arrow-back" size={24} color="black" />
-                <Ionicons name="ellipsis-vertical" size={24} color="black" />
-            </View>
+            <ScrollView>
+                <View style={styles.header}>
+                    <Ionicons name="arrow-back" size={24} color="black" />
+                    <Ionicons
+                        name="ellipsis-vertical"
+                        size={24}
+                        color="black"
+                    />
+                </View>
 
-            <View style={styles.profileContainer}>
-                <Image
-                    source={{ uri: "URL_DE_IMAGEN_AQUI" }}
-                    style={styles.profileImage}
-                />
-                <Text style={styles.name}>{userData.firstLast}</Text>
-                <Text style={styles.joined}>
-                    {calculateTimeSinceSignUp(userData.signUpDate)}
-                </Text>
-            </View>
+                <View style={styles.profileContainer}>
+                    <Image
+                        source={{ uri: "URL_DE_IMAGEN_AQUI" }}
+                        style={styles.profileImage}
+                    />
+                    <Text style={styles.name}>{userData.firstLast}</Text>
+                    <Text style={styles.joined}>
+                        {`Unido hace ${calculateTimeSinceSignUp(
+                            userData.signUpDate
+                        )}`}
+                    </Text>
+                </View>
 
-            <View style={styles.optionsContainer}>
-                <TouchableOpacity style={styles.option}>
-                    <Text style={styles.optionText}>Perfil</Text>
-                    <Ionicons name="chevron-forward" size={24} color="black" />
+                <View style={styles.optionsContainer}>
+                    <TouchableOpacity style={styles.option}>
+                        <Text style={styles.optionText}>Perfil</Text>
+                        <Ionicons
+                            name="chevron-forward"
+                            size={24}
+                            color="black"
+                        />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.option}>
+                        <Text style={styles.optionText}>Configuración</Text>
+                        <Ionicons
+                            name="chevron-forward"
+                            size={24}
+                            color="black"
+                        />
+                    </TouchableOpacity>
+                </View>
+
+                <TouchableOpacity style={styles.signOutButton}>
+                    <Text style={styles.signOutText}>Cerrar Sesión</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.option}>
-                    <Text style={styles.optionText}>Configuración</Text>
-                    <Ionicons name="chevron-forward" size={24} color="black" />
-                </TouchableOpacity>
-            </View>
-
-            <TouchableOpacity style={styles.signOutButton}>
-                <Text style={styles.signOutText}>Cerrar Sesión</Text>
-            </TouchableOpacity>
+            </ScrollView>
         </View>
     );
 };
