@@ -11,11 +11,15 @@ import { useSelector } from "react-redux";
 
 const AppNavigator = () => {
     const isAuth = useSelector((state) => {
-        return state.auth.token !== null && state.auth.token !== "";
+        return (
+            state.auth.token !== null &&
+            state.auth.token !== "" &&
+            state.auth.token !== undefined
+        );
     });
-
-    const didTryAutoLogin = useSelector((state) => state.auth.didTryAutoLogin);
-
+    const didTryAutoLogin = useSelector(
+        (state) => state.auth.didTryAutoLogin !== null
+    );
     return (
         <NavigationContainer>
             {isAuth && <MainNavigator />}

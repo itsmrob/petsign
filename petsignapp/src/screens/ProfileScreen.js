@@ -53,7 +53,7 @@ const UserProfile = () => {
                 />
                 <Text style={styles.name}>{userData.firstLast}</Text>
                 <Text style={styles.joined}>
-                    {calculateTimeSinceSignUp(userData.firstLast)}
+                    {calculateTimeSinceSignUp(userData.signUpDate)}
                 </Text>
             </View>
 
