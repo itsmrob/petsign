@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { View, ScrollView, StyleSheet, TouchableOpacity, ActivityIndicator } from "react-native";
+import {
+    View,
+    ScrollView,
+    StyleSheet,
+    TouchableOpacity,
+    ActivityIndicator,
+} from "react-native";
 import ReportCard from "../components/feedComponents/ReportCard";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useNavigation } from "@react-navigation/native";
@@ -67,23 +73,27 @@ const FeedScreen = () => {
     if (loading) {
         <View style={styles.loadingStatus}>
             <ActivityIndicator />
-        </View>
+        </View>;
     }
 
     return (
         <View style={styles.container}>
             <ScrollView>
-                {reports.map((reporte, index) => (
-                    <ReportCard
-                        key={index}
-                        petName={reporte.petName}
-                        petBreed={reporte.petBreed}
-                        petColor={reporte.petColor}
-                        lastSeenlocation={reporte.lastSeenLocation}
-                        lastSeenDate={reporte.lastSeenDate}
-                        photoURL={reporte.petImage}
-                    />
-                ))}
+                {reports.length > 0 ? (
+                    reports.map((reporte, index) => (
+                        <ReportCard
+                            key={index}
+                            petName={reporte.petName}
+                            petBreed={reporte.petBreed}
+                            petColor={reporte.petColor}
+                            lastSeenlocation={reporte.lastSeenLocation}
+                            lastSeenDate={reporte.lastSeenDate}
+                            photoURL={reporte.petImage}
+                        />
+                    ))
+                ) : (
+                    <Text>No hay publicaciones todavia</Text>
+                )}
             </ScrollView>
             <TouchableOpacity
                 style={styles.addButton}
@@ -99,8 +109,8 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     loadingStatus: {
-        justifyContent: 'center',
-        alignItems:'center'
+        justifyContent: "center",
+        alignItems: "center",
     },
     addButton: {
         position: "absolute",
