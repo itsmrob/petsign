@@ -29,7 +29,9 @@ export const useFetchReports = () => {
             }
         );
         return () => {
-            reports.off(listener);
+            if (reports.length) {
+                reports.off(listener);
+            }
         };
     }, []);
     return { reports, loading };

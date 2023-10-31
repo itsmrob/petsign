@@ -18,7 +18,6 @@ PetBasicInformation.propTypes = {
     petColor: PropTypes.string.isRequired,
 };
 
-// Subcomponente para mostrar la ubicación y fecha
 const LocationDate = ({ location, date }) => {
     return (
         <View style={styles.ubicacionFecha}>
@@ -33,7 +32,6 @@ LocationDate.propTypes = {
     date: PropTypes.string.isRequired,
 };
 
-// Componente principal ReportCard
 const ReportCard = (props) => {
     const {
         petName,
