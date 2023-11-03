@@ -17,7 +17,7 @@ const TabNavigator = () => {
     return (
         <Tab.Navigator>
             <Tab.Screen
-                name="Help others to find their pets!"
+                name="¿Los has visto?"
                 component={FeedScreen}
                 options={{
                     tabBarLabel: "Feed",
@@ -27,7 +27,7 @@ const TabNavigator = () => {
                 }}
             />
             <Tab.Screen
-                name="Look around you!"
+                name="Mira cerca de ti!"
                 component={FindScreen}
                 options={{
                     tabBarLabel: "Find out",
@@ -41,7 +41,7 @@ const TabNavigator = () => {
                 }}
             />
             <Tab.Screen
-                name="Your profile"
+                name="Tu perfil"
                 component={ProfileScreen}
                 options={{
                     tabBarLabel: "Profile",
