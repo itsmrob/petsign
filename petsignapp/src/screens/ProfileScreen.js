@@ -14,6 +14,8 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useSelector } from "react-redux";
 
 const UserProfile = () => {
+    const profilePhoto =
+        "https://static.vecteezy.com/system/resources/previews/005/129/844/non_2x/profile-user-icon-isolated-on-white-background-eps10-free-vector.jpg";
     const userData = useSelector((state) => {
         console.log(state.auth);
         return state.auth.userData;
@@ -53,10 +55,16 @@ const UserProfile = () => {
                 </View>
 
                 <View style={styles.profileContainer}>
-                    <Image
-                        source={{ uri: "URL_DE_IMAGEN_AQUI" }}
-                        style={styles.profileImage}
-                    />
+                    {profilePhoto ? (
+                        <Image
+                            source={{ uri: profilePhoto }}
+                            style={styles.profileImage}
+                        />
+                    ) : (
+                        <View style={styles.profilePlaceholder}>
+                            {/* add icon if you want */}
+                        </View>
+                    )}
                     <Text style={styles.name}>{userData.firstLast}</Text>
                     <Text style={styles.joined}>
                         {`Unido hace ${calculateTimeSinceSignUp(
@@ -147,6 +155,19 @@ const styles = StyleSheet.create({
     },
     signOutText: {
         fontSize: 18,
+    },
+    profileImage: {
+        width: 100,
+        height: 100,
+        borderRadius: 50,
+    },
+    profilePlaceholder: {
+        width: 100,
+        height: 100,
+        borderRadius: 50,
+        backgroundColor: "#e0e0e0",
+        justifyContent: "center",
+        alignItems: "center",
     },
 });
 
