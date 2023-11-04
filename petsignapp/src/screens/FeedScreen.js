@@ -28,6 +28,11 @@ const FeedScreen = () => {
         </View>;
     }
 
+    const showPetReport = (index) => {
+        const petInformation = reports[index] || {};
+        navigation.navigate("PetReport", petInformation);
+    };
+
     return (
         <View style={styles.container}>
             <ScrollView>
@@ -41,6 +46,7 @@ const FeedScreen = () => {
                             lastSeenlocation={reporte.lastSeenLocation}
                             lastSeenDate={reporte.lastSeenDate}
                             photoURL={reporte.petImage}
+                            onPress={() => showPetReport(index)}
                         />
                     ))
                 ) : (
