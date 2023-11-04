@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 
 const PetBasicInformation = ({ petName, petBreed, petColor }) => {
@@ -12,12 +11,6 @@ const PetBasicInformation = ({ petName, petBreed, petColor }) => {
     );
 };
 
-PetBasicInformation.propTypes = {
-    petName: PropTypes.string.isRequired,
-    petBreed: PropTypes.string.isRequired,
-    petColor: PropTypes.string.isRequired,
-};
-
 const LocationDate = ({ location, date }) => {
     return (
         <View style={styles.ubicacionFecha}>
@@ -25,11 +18,6 @@ const LocationDate = ({ location, date }) => {
             <Text style={styles.fecha}>{date}</Text>
         </View>
     );
-};
-
-LocationDate.propTypes = {
-    location: PropTypes.string.isRequired,
-    date: PropTypes.string.isRequired,
 };
 
 const ReportCard = (props) => {
@@ -46,9 +34,7 @@ const ReportCard = (props) => {
     // console.log(props);
     return (
         <View>
-            <TouchableOpacity
-                style={styles.card}
-                onPress={onPress}>
+            <TouchableOpacity style={styles.card} onPress={onPress}>
                 <Image source={{ uri: photoURL }} style={styles.imagen} />
                 <PetBasicInformation
                     petName={petName}
@@ -59,15 +45,6 @@ const ReportCard = (props) => {
             </TouchableOpacity>
         </View>
     );
-};
-
-ReportCard.propTypes = {
-    petName: PropTypes.string.isRequired,
-    petBreed: PropTypes.string.isRequired,
-    petColor: PropTypes.string.isRequired,
-    lastSeenlocation: PropTypes.string.isRequired,
-    lastSeenDate: PropTypes.string.isRequired,
-    photoURL: PropTypes.string.isRequired,
 };
 
 const styles = StyleSheet.create({

@@ -48,16 +48,7 @@ const MapComponent = (props) => {
         };
         getLocation();
     }, []);
-
-    // if (props) {
-    //     setLocation({
-    //         coords: {
-    //             latitude: props.latitude,
-    //             longitude: props.longitude,
-    //         },
-    //     });
-    // }
-
+    
     const handlePress = (event) => {
         const selectedCoords = event.nativeEvent.coordinate;
         setLocation({

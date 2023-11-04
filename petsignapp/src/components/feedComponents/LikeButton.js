@@ -1,7 +1,6 @@
 // LikeButton.js
 
 import { TouchableOpacity, Text } from "react-native";
-import PropTypes from "prop-types";
 
 const LikeButton = ({ liked, onPress }) => {
     return (
@@ -9,11 +8,6 @@ const LikeButton = ({ liked, onPress }) => {
             <Text style={styles.label}>{liked ? "Unlike" : "Like"}</Text>
         </TouchableOpacity>
     );
-};
-
-LikeButton.propTypes = {
-    liked: PropTypes.bool.isRequired,
-    onPress: PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({

@@ -13,7 +13,6 @@ import Input from "./../Input";
 import SubmitButton from "./../SubmitButton";
 import DateTimeButton from "../DateTimeButton";
 import { FontAwesome, Feather } from "@expo/vector-icons";
-import PropTypes from "prop-types";
 import CustomDropdown from "../CustomDropdown";
 import MapComponent from "../MapComponent.js";
 import { useNavigation, useRoute } from "@react-navigation/native";

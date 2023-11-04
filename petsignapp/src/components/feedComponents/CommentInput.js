@@ -1,5 +1,4 @@
 import { View, TextInput } from "react-native";
-import PropTypes from "prop-types";
 
 const CommentInput = ({ onSubmit }) => {
     const [text, setText] = useState("");
@@ -19,10 +18,6 @@ const CommentInput = ({ onSubmit }) => {
             <Button title="Submit" onPress={handleSubmit} />
         </View>
     );
-};
-
-CommentInput.propTypes = {
-    onSubmit: PropTypes.func.isRequired,
 };
 
 // Styles

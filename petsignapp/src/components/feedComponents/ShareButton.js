@@ -1,7 +1,6 @@
 // ShareButton.js
 
 import { TouchableOpacity, Text } from "react-native";
-import PropTypes from "prop-types";
 
 const ShareButton = ({ onPress }) => {
     const share = async () => {
@@ -30,8 +29,5 @@ const ShareButton = ({ onPress }) => {
     );
 };
 
-ShareButton.propTypes = {
-    onPress: PropTypes.func,
-};
 
 export default ShareButton;

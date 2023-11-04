@@ -11,6 +11,8 @@ import ReportScreen from "../screens/ReportScreen";
 import LocationScreen from "../screens/LocationScreen";
 import PetReportScreen from "../screens/PetReportScreen";
 
+import '../config/handleErrors'
+
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 

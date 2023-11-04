@@ -6,9 +6,8 @@ import {
     Modal,
     StyleSheet,
     Platform,
-    Button
+    Button,
 } from "react-native";
-import PropTypes from "prop-types";
 
 const CustomDropdown = ({
     label,
@@ -98,12 +97,5 @@ const styles = StyleSheet.create({
         color: "#333",
     },
 });
-
-CustomDropdown.propTypes = {
-    options: PropTypes.arrayOf(PropTypes.string).isRequired,
-    onOptionSelected: PropTypes.func.isRequired,
-    visible: PropTypes.bool.isRequired,
-    onClose: PropTypes.func.isRequired,
-};
 
 export default CustomDropdown;
