@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 
 const PetBasicInformation = ({ petName, petBreed, petColor }) => {
     return (
@@ -34,23 +34,29 @@ LocationDate.propTypes = {
 
 const ReportCard = (props) => {
     const {
+        key,
         petName,
         petBreed,
         petColor,
         lastSeenlocation,
         lastSeenDate,
         photoURL,
+        onPress,
     } = props;
     // console.log(props);
     return (
-        <View style={styles.card}>
-            <Image source={{ uri: photoURL }} style={styles.imagen} />
-            <PetBasicInformation
-                petName={petName}
-                petBreed={petBreed}
-                petColor={petColor}
-            />
-            <LocationDate location={lastSeenlocation} date={lastSeenDate} />
+        <View>
+            <TouchableOpacity
+                style={styles.card}
+                onPress={onPress}>
+                <Image source={{ uri: photoURL }} style={styles.imagen} />
+                <PetBasicInformation
+                    petName={petName}
+                    petBreed={petBreed}
+                    petColor={petColor}
+                />
+                <LocationDate location={lastSeenlocation} date={lastSeenDate} />
+            </TouchableOpacity>
         </View>
     );
 };

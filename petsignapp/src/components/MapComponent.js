@@ -14,14 +14,14 @@ import colors from "../constants/colors";
 
 import { useNavigation } from "@react-navigation/native";
 
-const MapComponent = () => {
+const MapComponent = (props) => {
     const [location, setLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
 
     const navigation = useNavigation();
 
     useEffect(() => {
-        (async () => {
+        const getLocation = async () => {
             try {
                 let { status } =
                     await Location.requestForegroundPermissionsAsync();
@@ -45,8 +45,18 @@ const MapComponent = () => {
                     error
                 );
             }
-        })();
+        };
+        getLocation();
     }, []);
+
+    // if (props) {
+    //     setLocation({
+    //         coords: {
+    //             latitude: props.latitude,
+    //             longitude: props.longitude,
+    //         },
+    //     });
+    // }
 
     const handlePress = (event) => {
         const selectedCoords = event.nativeEvent.coordinate;
